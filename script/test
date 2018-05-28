@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with non-zero status
+set -e
+
+# Switch to the root directory of the project
+cd $(dirname "${BASH_SOURCE[0]}")
+cd ..
+
+venv=find_store_test_virtual_env
+
+if [ ! -d "${venv}" ]; then
+    echo "find_store test Python virtual environment not found. Run \`./script/setup test\` first."
+    exit 1
+fi
+
+source ${venv}/bin/activate
+echo "Running pyflakes..."
+pyflakes store_finder/ tests/
+echo "Running pycodestyle..."
+pycodestyle store_finder/ tests/
+echo "Running pytest..."
+python -m pytest -q --cov=store_finder --cov-report term-missing tests/

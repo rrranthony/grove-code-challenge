@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with non-zero status
+set -e
+
+# Switch to the root directory of the project
+cd $(dirname "${BASH_SOURCE[0]}")
+cd ..
+
+if [ "$1" == "test" ]; then
+    venv=find_store_test_virtual_env
+    venv_name="find_store test Python virtual environment"
+    requirements_file=requirements-test.txt
+else
+    venv=find_store_virtual_env
+    venv_name="find_store Python virtual environment"
+    requirements_file=requirements.txt
+fi
+
+echo "Setting up ${venv_name}"
+rm -rf ${venv}
+echo -n "Creating ${venv_name}..."
+python3 -m venv ${venv}
+echo "done."
+source ${venv}/bin/activate
+echo -n "Installing requirements into ${venv_name}..."
+pip install --quiet --upgrade pip
+pip install --quiet --requirement ${requirements_file}
+echo "done."
+deactivate
+echo "${venv_name} setup complete."

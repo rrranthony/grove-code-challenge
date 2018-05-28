@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source find_store_virtual_env/bin/activate
+python store_finder/store_finder.py "$@"
